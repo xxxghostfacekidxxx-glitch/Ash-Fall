@@ -58,7 +58,7 @@ h1 {
   animation: emerge 1.8s ease-out forwards;
 }
 
-  padding: 1rem 2rem;
+  { padding: 1rem 2rem;
   background: #d35400;
   color: #e5e5e5;
   text-decoration: none;
