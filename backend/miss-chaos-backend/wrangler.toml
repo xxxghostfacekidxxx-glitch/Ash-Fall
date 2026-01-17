@@ -6,3 +6,7 @@ type = "typescript"
 [build]
 command = "npm run build"
 upload_format = "service-worker"
+
+[[routes]]
+pattern = "api.ash-fall.com/*"
+zone_id = "64a9758d6b29f74babf3df1c2daf490f"
