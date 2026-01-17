@@ -1,0 +1,8 @@
+name = "miss-chaos-backend"
+main = "src/index.ts"
+compatibility_date = "2026-01-16"
+type = "typescript"
+
+[build]
+command = "npm run build"
+upload_format = "service-worker"
