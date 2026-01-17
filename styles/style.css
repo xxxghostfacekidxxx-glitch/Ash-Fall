@@ -69,7 +69,17 @@ h1 {
   cursor: pointer;
   transition: background 0.3s ease;
 }
+.enter-button {
+  padding: 1rem 2rem;
+  background: #d35400;
+  color: #e5e5e5;
+  text-decoration: none;
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
 
-.enter-button:hover {
-  background: #e67e22;
 }
