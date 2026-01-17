@@ -22,10 +22,16 @@ export default {
 
     // Handle endpoints
     switch (url.pathname) {
-      case "/message":
-        if (request.method !== "POST") {
-          return jsonResponse({ error: "POST required" }, 405);
-        }
+      app.get('/message', () => {
+  return new Response("Ugh, what do you want");
+});
+				app.post('/chat', async (req, env) => {
+  const { userId, message } = await req.json();
+  // memory logic here
+  return Response.json({ reply });
+});
+
+
 
         const body = await request.json();
         const userId = body.userId;
