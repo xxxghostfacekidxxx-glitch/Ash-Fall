@@ -1,9 +1,12 @@
-export async function getMemory(env, userId) {
-  return (await env.MEMORY.get(userId, { type: "json" })) ?? [];
+export async function getMemory(env: any, userId: string) {
+  const mem = await env.MEMORY.get(userId);
+  return mem ? JSON.parse(mem) : [];
 }
 
-export async function saveMemory(env, userId, entry) {
-  const memory = await getMemory(env, userId);
-  memory.push(entry);
-  await env.MEMORY.put(userId, JSON.stringify(memory));
+export async function saveMemory(env: any, userId: string, reply: string) {
+  const mem = await getMemory(env, userId);
+  const updated = [...mem, reply];
+  await env.MEMORY.put(userId, JSON.stringify(updated));
+  return updated;
 }
+
