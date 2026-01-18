@@ -1,24 +1,11 @@
-import { handleHealth } from "./routes/health";
-import { handleMessage } from "./routes/message";
 import { handleChat } from "./routes/chat";
-import { handleRequest } from "./routes/chat";
+import { handleRandom } from "./routes/random";
 
 export default {
-  async fetch(req, env) {
-    return handleRequest(req, env);
-  },
-};
-
-export default {
-  async fetch(req, env) {
+  async fetch(req: Request, env: any) {
     const url = new URL(req.url);
-
-    if (url.pathname === "/health") return handleHealth();
-    if (url.pathname === "/message") return handleMessage();
-    if (url.pathname === "/chat" && req.method === "POST")
-      return handleChat(req, env);
-
-    return new Response("Not found", { status: 404 });
+    if (url.pathname === "/message") return handleChat(req, env);
+    if (url.pathname === "/random") return handleRandom();
+    return new Response("Not Found", { status: 404 });
   }
 };
-
