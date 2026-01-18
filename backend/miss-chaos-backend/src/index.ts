@@ -1,6 +1,13 @@
 import { handleHealth } from "./routes/health";
 import { handleMessage } from "./routes/message";
 import { handleChat } from "./routes/chat";
+import { handleRequest } from "./routes/chat";
+
+export default {
+  async fetch(req, env) {
+    return handleRequest(req, env);
+  },
+};
 
 export default {
   async fetch(req, env) {
