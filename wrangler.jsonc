@@ -5,7 +5,7 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 {
-2026-01-18T23:45:22.562Z	    "name": "worker-name",
+2026-01-18T23:45:22.562Z	    "name": "risefromtheashes",
 2026-01-18T23:45:22.562Z	    "compatibility_date": "2026-01-18",
 2026-01-18T23:45:22.563Z	    "main": "src/index.ts"
 2026-01-18T23:45:22.563Z	  }
