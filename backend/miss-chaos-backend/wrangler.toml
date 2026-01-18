@@ -1,12 +1,12 @@
 name = "miss-chaos-backend"
-main = "src/index.ts"
-compatibility_date = "2026-01-16"
-type = "typescript"
+main = "dist/index.js"
+compatibility_date = "2026-01-18"
+type = "modules"
 
 [build]
 command = "npm run build"
 upload_format = "service-worker"
 
-[[routes]]
-pattern = "api.ash-fall.com/*"
-zone_id = "64a9758d6b29f74babf3df1c2daf490f"
+[[kv_namespaces]]
+binding = "MEMORY"
+id = "2eb4c3875662467b8f89d537bcd74535"
