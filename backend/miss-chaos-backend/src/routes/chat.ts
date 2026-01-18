@@ -1,13 +1,33 @@
 import { getMemory, saveMemory } from "../services/memory";
 import { generateReply } from "../services/Chaos";
 
-export async function handleChat(req, env) {
-  const { userId, message } = await req.json();
+// Generate a random UUID for /random endpoint
+function generateRandomUUID() {
+  return crypto.randomUUID();
+}
 
-  const memory = await getMemory(env, userId);
-  const reply = generateReply(message, memory);
+export async function handleRequest(req, env) {
+  const url = new URL(req.url);
 
-  await saveMemory(env, userId, reply);
+  if (url.pathname === "/message" && req.method === "POST") {
+    const { userId, message } = await req.json();
 
-  return Response.json({ reply, memory });
+    const memory = await getMemory(env, userId);
+    const reply = generateReply(message, memory);
+
+    await saveMemory(env, userId, reply);
+
+    return new Response(JSON.stringify({ reply, memory }), {
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  if (url.pathname === "/random" && req.method === "GET") {
+    return new Response(JSON.stringify({ random: generateRandomUUID() }), {
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  // Default fallback
+  return new Response("Not found", { status: 404 });
 }
