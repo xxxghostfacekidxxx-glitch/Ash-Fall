@@ -1,5 +1,5 @@
 import { getMemory, saveMemory } from "../services/memory";
-import { generateReply } from "../services/chaos";
+import { generateReply } from "../services/Chaos";
 
 export async function handleChat(req, env) {
   const { userId, message } = await req.json();
