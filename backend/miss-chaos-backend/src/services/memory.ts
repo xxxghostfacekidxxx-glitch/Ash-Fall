@@ -1,0 +1,16 @@
+
+
+
+import type { Env } from "../env";
+export async function getMemory(env: Env, userId: string) {
+  const mem = await env.MEMORY.get(userId);
+  return mem ? JSON.parse(mem) : [];
+}
+
+export async function saveMemory(env: Env, userId: string, reply: string) {
+  const mem = await getMemory(env, userId);
+  const updated = [...mem, reply];
+  await env.MEMORY.put(userId, JSON.stringify(updated));
+  return updated;
+}
+
