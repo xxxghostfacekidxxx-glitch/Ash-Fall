@@ -1,9 +1,10 @@
 name = "miss-chaos-backend"
 main = "dist/index.js"
-compatibility_date = "2026-01-18"
+compatibility_date = "2026-01-19"
+type = "modules"
 
 [build]
-command = "npm run build"
+command = "npm install && npm run build"
 
 [[kv_namespaces]]
 binding = "MEMORY"
