@@ -1,3 +1,7 @@
+
+
+
+import type { Env } from "../env";
 export async function getMemory(env: Env, userId: string) {
   const mem = await env.MEMORY.get(userId);
   return mem ? JSON.parse(mem) : [];
