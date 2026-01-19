@@ -1,0 +1,11 @@
+name = "risefromtheashes"
+main = "src/index.js"   # adjust if TS: src/index.ts
+compatibility_date = "2026-01-19"
+type = "modules"
+
+[build]
+command = "npm install && npm run build"
+
+[[kv_namespaces]]
+binding = "MEMORY"
+id = "YOUR_KV_NAMESPACE_ID"  # if this Worker uses KV
