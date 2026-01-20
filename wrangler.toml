@@ -4,7 +4,7 @@
 
 # Worker config
 name = "miss-chaos-backend"
-main = "dist/index.js"          # compiled Worker entrypoint
+main = "src/index.js"          # compiled Worker entrypoint
 type = "module"
 compatibility_date = "2026-01-18"
 
