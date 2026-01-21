@@ -27,5 +27,5 @@ jobs:
       # 4. Deploy to Cloudflare Worker
       - name: Deploy Worker
         env:
-          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}  # store your API token in GitHub Secrets
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}  # store your API token in GitHub Secrets
         run: wrangler deploy --verbose
