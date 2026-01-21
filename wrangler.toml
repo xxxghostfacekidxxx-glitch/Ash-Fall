@@ -1,31 +1,24 @@
 # -------------------------------
-# Ash-Fall / Miss Chaos Config
+# Ash-Fall / Miss Chaos Worker Config
 # -------------------------------
 
-# Worker config
 name = "miss-chaos-backend"
-main = "backend/miss-chaos-backend/src/index.js"          # compiled Worker entrypoint
+main = "backend/risefromtheashes/index.js"
+compatibility_date = "2026-01-19"
 type = "module"
-compatibility_date = "2026-01-18"
 
 [build]
-command = "npm run build"       # builds Worker and static site
+command = "npm install && npm run build"
 upload_format = "service-worker"
 
 [[kv_namespaces]]
 binding = "MEMORY"
 id = "2eb4c3875662467b8f89d537bcd74535"
 
-# Pages config
-[site]
-bucket = "./dist"               # folder with static HTML/CSS/JS
-entry-point = "workers-site"   # standard Cloudflare Pages workers entry
-
-[build]
-pages_build_output_dir = "./dist"  # Pages needs this to find static assets
-
-name = "risefromtheashes"
-compatibility_date = "2026-01-16"
-
+# Preview environment
 [env.preview]
-name = "risefromtheashes-preview"
+name = "miss-chaos-backend-preview"
+
+[env.preview.build]
+command = "npm install && npm run build"
+upload_format = "service-worker"
