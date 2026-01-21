@@ -24,7 +24,7 @@ jobs:
 
       - name: Deploy Worker
         env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.2835905 }}
         run: |
           if [ "${GITHUB_REF_NAME}" = "main" ]; then
             wrangler deploy
