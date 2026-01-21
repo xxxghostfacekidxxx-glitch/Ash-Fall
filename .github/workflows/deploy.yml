@@ -1,36 +1,42 @@
-name: Deploy Cloudflare Worker
+name: Cloudflare Worker Deploy
 
 on:
   push:
     branches:
-      - main  # only deploy when main branch is updated
+      - main
+      - "**"
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Check out the code
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-      # 2. Set up Node.js environment
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
 
-      # 3. Install Wrangler globally
+      - name: Install dependencies
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
+
       - name: Install Wrangler
-        run: npm install -g wrangler@4.59.3
+        run: npm install -g wrangler@4
 
-      # 4. Deploy to Cloudflare Worker
       - name: Deploy Worker
         env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.2835905}}  # store your API token in GitHub Secrets
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: |
-  if [ "${{ github.ref_name }}" = "main" ]; then
-    wrangler deploy
-  else
-    wrangler deploy --env preview
-  fi
+          if [ "${GITHUB_REF_NAME}" = "main" ]; then
+            wrangler deploy
+          else
+            wrangler deploy --env preview
+          fi
