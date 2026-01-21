@@ -8,6 +8,7 @@ compatibility_date = "2026-01-19"
 type = "module"
 
 [build]
+# Build Worker and copy static assets into 'dist' folder
 command = "npm install && npm run build"
 upload_format = "service-worker"
 
