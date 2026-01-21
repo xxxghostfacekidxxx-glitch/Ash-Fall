@@ -23,3 +23,9 @@ entry-point = "workers-site"   # standard Cloudflare Pages workers entry
 
 [build]
 pages_build_output_dir = "./dist"  # Pages needs this to find static assets
+
+name = "risefromtheashes"
+compatibility_date = "2026-01-16"
+
+[env.preview]
+name = "risefromtheashes-preview"
