@@ -1,7 +1,7 @@
 name = "miss-chaos-backend"
-main = "backend/risefromtheashes/dist/index.js"
+main = "backend/risefromtheashes/index.js"
 compatibility_date = "2026-01-19"
-type = "modules"
+type = "module"
 
 [[kv_namespaces]]
 binding = "MEMORY"
