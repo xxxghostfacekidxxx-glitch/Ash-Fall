@@ -32,15 +32,10 @@ jobs:
             wrangler deploy --env preview
           fi
 
-name: Deploy Miss Chaos Worker
+#Deploy Miss Chaos Worker
 
-on:
-  push:
-    branches:
-      - '**'  # all branches
 
-jobs:
-  deploy:
+
     runs-on: ubuntu-latest
     steps:
       # 1️⃣ Checkout repo
