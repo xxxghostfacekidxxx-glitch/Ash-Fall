@@ -1,25 +1,25 @@
-# -------------------------------
-# Ash-Fall / Miss Chaos Worker Config
-# -------------------------------
-
 name = "miss-chaos-backend"
-main = "backend/risefromtheashes/index.js"
+main = "backend/risefromtheashes/dist/index.js"
 compatibility_date = "2026-01-19"
 type = "module"
 
 [build]
-# Build Worker and copy static assets into 'dist' folder
 command = "npm install && npm run build"
 upload_format = "service-worker"
+
+[assets]
+directory = "backend/risefromtheashes/dist"
 
 [[kv_namespaces]]
 binding = "MEMORY"
 id = "2eb4c3875662467b8f89d537bcd74535"
 
-# Preview environment
 [env.preview]
 name = "miss-chaos-backend-preview"
 
 [env.preview.build]
 command = "npm install && npm run build"
 upload_format = "service-worker"
+
+[env.preview.assets]
+directory = "backend/risefromtheashes/dist"
