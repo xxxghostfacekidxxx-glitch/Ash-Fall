@@ -5,7 +5,7 @@ type = "modules"
 
 [build]
 command = "npm install && npm run build"
-upload_format = "service-worker"
+
 
 [assets]
 directory = "backend/risefromtheashes/dist"
