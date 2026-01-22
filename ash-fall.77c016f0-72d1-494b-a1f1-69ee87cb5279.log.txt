@@ -1,0 +1,105 @@
+2026-01-18T23:57:16.45541Z	Cloning repository...
+2026-01-18T23:57:17.008446Z	From https://github.com/xxxghostfacekidxxx-glitch/Ash-Fall
+2026-01-18T23:57:17.009002Z	 * branch            88870fb7c0ecfa255a84ea9dd8a676dfeec091b0 -> FETCH_HEAD
+2026-01-18T23:57:17.009109Z	
+2026-01-18T23:57:17.037041Z	HEAD is now at 88870fb Update wrangler.jsonc
+2026-01-18T23:57:17.037588Z	
+2026-01-18T23:57:17.105511Z	
+2026-01-18T23:57:17.105983Z	Using v2 root directory strategy
+2026-01-18T23:57:17.125013Z	Success: Finished cloning repository files
+2026-01-18T23:57:19.026124Z	Checking for configuration in a Wrangler configuration file (BETA)
+2026-01-18T23:57:19.027268Z	
+2026-01-18T23:57:19.028001Z	Found wrangler.json file. Reading build configuration...
+2026-01-18T23:57:19.110911Z	[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mParseError: PropertyNameExpected[0m
+2026-01-18T23:57:19.111177Z	
+2026-01-18T23:57:19.111332Z	      at parseJSONC (/opt/pages/build_tool/js/node_modules/wrangler/wrangler-dist/cli.js:129423:11)
+2026-01-18T23:57:19.111448Z	      at experimental_readRawConfig (/opt/pages/build_tool/js/node_modules/wrangler/wrangler-dist/cli.js:134164:17)
+2026-01-18T23:57:19.111553Z	      at readPagesConfig (/opt/pages/build_tool/js/node_modules/wrangler/wrangler-dist/cli.js:134111:50)
+2026-01-18T23:57:19.111676Z	      at Object.Handler [as handler] (/opt/pages/build_tool/js/node_modules/wrangler/wrangler-dist/cli.js:167118:14)
+2026-01-18T23:57:19.111783Z	      at /opt/pages/build_tool/js/node_modules/wrangler/wrangler-dist/cli.js:145791:46
+2026-01-18T23:57:19.111957Z	      at maybeAsyncResult (/opt/pages/build_tool/js/node_modules/wrangler/wrangler-dist/cli.js:145590:83)
+2026-01-18T23:57:19.112096Z	      at CommandInstance.handleValidationAndGetResult (/opt/pages/build_tool/js/node_modules/wrangler/wrangler-dist/cli.js:145790:19)
+2026-01-18T23:57:19.112205Z	      at CommandInstance.applyMiddlewareAndGetResult (/opt/pages/build_tool/js/node_modules/wrangler/wrangler-dist/cli.js:145821:243)
+2026-01-18T23:57:19.112431Z	      at CommandInstance.runCommand (/opt/pages/build_tool/js/node_modules/wrangler/wrangler-dist/cli.js:145728:212)
+2026-01-18T23:57:19.112554Z	      at YargsInstance.[runYargsParserAndExecuteCommands] (/opt/pages/build_tool/js/node_modules/wrangler/wrangler-dist/cli.js:148544:92) {
+2026-01-18T23:57:19.112665Z	    text: 'PropertyNameExpected',
+2026-01-18T23:57:19.112772Z	    notes: [],
+2026-01-18T23:57:19.112893Z	    location: {
+2026-01-18T23:57:19.112991Z	      lineText: '{',
+2026-01-18T23:57:19.113199Z	      line: 7,
+2026-01-18T23:57:19.113367Z	      column: 0,
+2026-01-18T23:57:19.113501Z	      file: '/opt/buildhome/repo/wrangler.jsonc',
+2026-01-18T23:57:19.113626Z	      fileText: '/**\n' +
+2026-01-18T23:57:19.113769Z	        ' * For more details on how to configure Wrangler, refer to:\n' +
+2026-01-18T23:57:19.113897Z	        ' * [4mhttps://developers.cloudflare.com/workers/wrangler/configuration/\n'[0m +
+2026-01-18T23:57:19.11401Z	        ' */\n' +
+2026-01-18T23:57:19.114124Z	        '{\n' +
+2026-01-18T23:57:19.114234Z	        '\t"$schema": "node_modules/wrangler/config-schema.json",\n' +
+2026-01-18T23:57:19.114346Z	        '{\n' +
+2026-01-18T23:57:19.114467Z	        '2026-01-18T23:45:22.562Z\t    "name": "risefromtheashes",\n' +
+2026-01-18T23:57:19.114598Z	        '2026-01-18T23:45:22.562Z\t    "compatibility_date": "2026-01-18",\n' +
+2026-01-18T23:57:19.114729Z	        '2026-01-18T23:45:22.563Z\t    "main": "src/index.ts"\n' +
+2026-01-18T23:57:19.114878Z	        '2026-01-18T23:45:22.563Z\t  }\n' +
+2026-01-18T23:57:19.115002Z	        '\t\n' +
+2026-01-18T23:57:19.115137Z	        '"name": "miss-chaos-backend",\n' +
+2026-01-18T23:57:19.11525Z	        '\t"main": "src/index.ts",\n' +
+2026-01-18T23:57:19.115365Z	        '\t"compatibility_date": "2025-09-27",\n' +
+2026-01-18T23:57:19.115474Z	        '\t"compatibility_flags": [\n' +
+2026-01-18T23:57:19.115597Z	        '\t\t"global_fetch_strictly_public"\n' +
+2026-01-18T23:57:19.115725Z	        '\t],\n' +
+2026-01-18T23:57:19.115854Z	        '\t"assets": {\n' +
+2026-01-18T23:57:19.115977Z	        '\t\t// The path to the directory containing the `index.html` file to be served at `/`\n' +
+2026-01-18T23:57:19.116135Z	        '\t\t"directory": "./public"\n' +
+2026-01-18T23:57:19.116273Z	        '\t},\n' +
+2026-01-18T23:57:19.11639Z	        '\t"observability": {\n' +
+2026-01-18T23:57:19.116506Z	        '\t\t"enabled": true\n' +
+2026-01-18T23:57:19.116617Z	        '\t},\n' +
+2026-01-18T23:57:19.11674Z	        '\t"kv_namespaces": [\n' +
+2026-01-18T23:57:19.116884Z	        '\t\t{\n' +
+2026-01-18T23:57:19.11701Z	        '\t\t\t"binding": "MEMORY",\n' +
+2026-01-18T23:57:19.117123Z	        '\t\t\t"id": "2eb4c3875662467b8f89d537bcd74535",\n' +
+2026-01-18T23:57:19.117239Z	        '\t\t\t"preview_id": "e7506d9799cb4d0b938a4a837ca23b7d"\n' +
+2026-01-18T23:57:19.117356Z	        '\t\t}\n' +
+2026-01-18T23:57:19.117476Z	        '\t]\n' +
+2026-01-18T23:57:19.117741Z	        '\t/**\n' +
+2026-01-18T23:57:19.117981Z	        '\t * Smart Placement\n' +
+2026-01-18T23:57:19.118126Z	        '\t * [4mhttps://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement\n'[0m +
+2026-01-18T23:57:19.118239Z	        '\t */\n' +
+2026-01-18T23:57:19.118345Z	        '\t// "placement": {  "mode": "smart" }\n' +
+2026-01-18T23:57:19.118455Z	        '\t/**\n' +
+2026-01-18T23:57:19.118566Z	        '\t * Bindings\n' +
+2026-01-18T23:57:19.118671Z	        '\t * Bindings allow your Worker to interact with resources on the Cloudflare Developer Platform, including\n' +
+2026-01-18T23:57:19.118789Z	        '\t * databases, object storage, AI inference, real-time communication and more.\n' +
+2026-01-18T23:57:19.118928Z	        '\t * [4mhttps://developers.cloudflare.com/workers/runtime-apis/bindings/\n'[0m +
+2026-01-18T23:57:19.119111Z	        '\t */\n' +
+2026-01-18T23:57:19.119224Z	        '\t/**\n' +
+2026-01-18T23:57:19.119337Z	        '\t * Environment Variables\n' +
+2026-01-18T23:57:19.119448Z	        '\t * [4mhttps://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables\n'[0m +
+2026-01-18T23:57:19.119557Z	        '\t * Note: Use secrets to store sensitive data.\n' +
+2026-01-18T23:57:19.11967Z	        '\t * [4mhttps://developers.cloudflare.com/workers/configuration/secrets/\n'[0m +
+2026-01-18T23:57:19.119809Z	        '\t */\n' +
+2026-01-18T23:57:19.119941Z	        '\t// "vars": {  "MY_VARIABLE": "production_value" }\n' +
+2026-01-18T23:57:19.120057Z	        '\t/**\n' +
+2026-01-18T23:57:19.120175Z	        '\t * Service Bindings (communicate between multiple Workers)\n' +
+2026-01-18T23:57:19.120284Z	        '\t * [4mhttps://developers.cloudflare.com/workers/wrangler/configuration/#service-bindings\n'[0m +
+2026-01-18T23:57:19.120391Z	        '\t */\n' +
+2026-01-18T23:57:19.120515Z	        '\t// "services": [  {   "binding": "MY_SERVICE",   "service": "my-service"  } ]\n' +
+2026-01-18T23:57:19.120618Z	        '}\n',
+2026-01-18T23:57:19.120735Z	      length: 1
+2026-01-18T23:57:19.120907Z	    },
+2026-01-18T23:57:19.121271Z	    kind: 'error'
+2026-01-18T23:57:19.121445Z	  }
+2026-01-18T23:57:19.121676Z	
+2026-01-18T23:57:19.121779Z	
+2026-01-18T23:57:20.207227Z	🪵  Logs were written to "/root/.config/.wrangler/logs/wrangler-2026-01-18_23-57-18_797.log"
+2026-01-18T23:57:20.221689Z	A wrangler.toml file was found but it does not appear to be valid. Did you mean to use wrangler.toml to configure Pages? If so, then make sure the file is valid and contains the `pages_build_output_dir` property. Skipping file and continuing.
+2026-01-18T23:57:20.22198Z	No build command specified. Skipping build step.
+2026-01-18T23:57:20.222487Z	Note: No functions dir at /functions found. Skipping.
+2026-01-18T23:57:20.222607Z	Validating asset output directory
+2026-01-18T23:57:22.786636Z	Deploying your site to Cloudflare's global network...
+2026-01-18T23:57:24.81656Z	Uploading... (3/3)
+2026-01-18T23:57:24.817312Z	✨ Success! Uploaded 0 files (3 already uploaded) (0.26 sec)
+2026-01-18T23:57:24.817432Z	
+2026-01-18T23:57:25.175821Z	✨ Upload complete!
+2026-01-18T23:57:28.559666Z	Success: Assets published!
+2026-01-18T23:57:29.924272Z	Success: Your site was deployed!
