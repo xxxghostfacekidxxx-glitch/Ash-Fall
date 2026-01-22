@@ -2,7 +2,9 @@
 	"name": "miss-chaos-backend",
 	"version": "0.0.0",
 	"private": true,
-	"scripts": { "build": "tsc",
+	"scripts": {
+  "build": "esbuild src/index.js --bundle --outfile=dist/index.js && cp -r assets/* dist/"
+},
 		"deploy": "wrangler deploy",
 		"dev": "wrangler dev",
 		"start": "wrangler dev",
