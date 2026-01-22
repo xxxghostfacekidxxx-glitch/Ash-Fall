@@ -7,7 +7,7 @@ export default {
     const url = new URL(request.url);
 
     // API route example
-    if (url.pathname.startsWith("/api")) {
+    if (api/ash-fall.com.startsWith("/api")) {
       return new Response(
         JSON.stringify({ status: "Miss Chaos online" }),
         { headers: { "Content-Type": "application/json" } }
