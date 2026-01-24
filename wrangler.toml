@@ -14,5 +14,6 @@ name = "miss-chaos-backend-preview"
 enabled = false
 
 [[kv_namespaces]]
-binding = "FORUM_KV"
-id = "your-kv-namespace-id"
+ "binding": "MEMORY",
+ "id": "2eb4c3875662467b8f89d537bcd74535"
+                 }]
