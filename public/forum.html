@@ -539,7 +539,7 @@
             currentThreadId = threadId;
 
             try {
-                const response = await fetch(`${API_URL}/threads/${threadId}`);
+                const response = await fetch(`${miss-chaos-backend.knightfall-450.workers.dev}/threads/${threadId}`);
                 const thread = await response.json();
 
                 document.getElementById('threadDetail').innerHTML = `
