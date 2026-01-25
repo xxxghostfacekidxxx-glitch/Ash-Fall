@@ -1,19 +1,30 @@
-
-name = 'risefromtheashes'
+# wrangler.toml for Ash-Fall / Miss Chaos Worker
+name = "risefromtheashes"
 main = "backend/risefromtheashes/index.js"
-compatibility_date = "2026-01-19"
 type = "module"
+compatibility_date = "2026-01-19"
+
+# KV Namespace Bindings
+[[kv_namespaces]]
+binding = "THREADS_KV"
+id = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"  # replace with your KV namespace ID for threads
 
 [[kv_namespaces]]
-binding = "MEMORY"
-id = "2eb4c3875662467b8f89d537bcd74535"
+binding = "USERS_KV"
+id = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"  # replace with your KV namespace ID for users
 
+[[kv_namespaces]]
+binding = "VOTES_KV"
+id = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"  # replace with your KV namespace ID for votes
+
+# Preview Environment
 [env.preview]
 name = "miss-chaos-backend-preview"
+
+# Observability
 [observability]
 enabled = false
 
-[[FORUM_KV]]
- binding = "MEMORY" 
-id = "2eb4c3875662467b8f89d537bcd74535"
-                 
+# Optional: global environment variables
+[vars]
+API_URL = "https://miss-chaos-backend.knightfall-450.workers.dev"
