@@ -23,6 +23,6 @@
     "@baseai/core": "^0.9.43"
   },
   "devDependencies": {
-    "baseai": "^0.9.44"
+    "baseai": "^0.0.1"
   }
 }
