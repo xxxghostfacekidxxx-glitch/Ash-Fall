@@ -1,0 +1,19 @@
+{
+  "name": "risefromtheashes",
+ "scripts": {
+  "build": "mkdir -p dist && cp index.js dist/index.js",
+  "test": "echo \"Error: no test specified\" && exit 1"
+} "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+  "build": "mkdir -p dist && cp index.js dist/index.js",
+  "test": "echo \"Error: no test specified\" && exit 1"
+}
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "modules"
+}

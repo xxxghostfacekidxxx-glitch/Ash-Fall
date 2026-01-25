@@ -1,0 +1,14 @@
+2026-01-19T00:14:36.211042089Z	Cloning repository...
+2026-01-19T00:14:36.794128362Z	From https://github.com/xxxghostfacekidxxx-glitch/Ash-Fall
+2026-01-19T00:14:36.794620003Z	 * branch            88870fb7c0ecfa255a84ea9dd8a676dfeec091b0 -> FETCH_HEAD
+2026-01-19T00:14:36.794909324Z	
+2026-01-19T00:14:36.826769368Z	HEAD is now at 88870fb Update wrangler.jsonc
+2026-01-19T00:14:36.827416875Z	
+2026-01-19T00:14:36.896880175Z	
+2026-01-19T00:14:36.897200034Z	Using v2 root directory strategy
+2026-01-19T00:14:36.916580045Z	Success: Finished cloning repository files
+2026-01-19T00:14:38.986531381Z	Checking for configuration in a Wrangler configuration file (BETA)
+2026-01-19T00:14:42.970417696Z	Deploying your site to Cloudflare's global network...
+2026-01-19T00:14:45.040923292Z	Uploading... (3/3)
+2026-01-19T00:14:48.635888Z	Success: Assets published!
+2026-01-19T00:14:50.345738Z	Success: Your site was deployed!

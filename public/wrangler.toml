@@ -1,0 +1,14 @@
+
+name = 'risefromtheashes'
+main = "backend/risefromtheashes/index.js"
+compatibility_date = "2026-01-19"
+type = "module"
+
+[[kv_namespaces]]
+binding = "MEMORY"
+id = "2eb4c3875662467b8f89d537bcd74535"
+
+[env.preview]
+name = "miss-chaos-backend-preview"
+[observability]
+enabled = false

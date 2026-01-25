@@ -4,7 +4,6 @@ on:
   issues:
     types: [opened]
 
-# Set minimal permissions required for the workflow
 permissions:
   issues: write
   contents: read
@@ -12,9 +11,6 @@ permissions:
 jobs:
   summary:
     runs-on: ubuntu-latest
-    permissions:
-      issues: write
-      contents: read
 
     steps:
       - name: Checkout repository
@@ -25,25 +21,31 @@ jobs:
         uses: actions/ai-inference@v1
         with:
           prompt: |
-            Summarize the following GitHub issue in one paragraph:
+            Summarize the following GitHub issue in one concise paragraph:
             Title: ${{ github.event.issue.title }}
             Body: ${{ github.event.issue.body }}
 
-      - name: Comment with AI summary (github-script)
+      - name: Comment with AI summary (Markdown formatted & trimmed)
         uses: actions/github-script@v7
         with:
           script: |
-            // Use workflow expression to inject the inference output as a literal string
-            const body = "${{ steps.inference.outputs.response }}";
+            // Parse AI output safely
+            let summary = JSON.parse('${{ toJson(steps.inference.outputs.response) }}');
+
+            // Trim to 400 characters
+            if (summary.length > 400) {
+              summary = summary.slice(0, 400);
+              const lastSpace = summary.lastIndexOf(' ');
+              if (lastSpace > 0) summary = summary.slice(0, lastSpace) + '...';
+              else summary += '...';
+            }
+
+            // Build Markdown comment
+            const body = `**Issue Title:** ${context.payload.issue.title}\n\n> ${summary}`;
+
             await github.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
               body
             });
-
-      # Alternatively you can post the comment using the gh CLI:
-      # - name: Comment with AI summary (gh)
-      #   run: gh issue comment ${{ github.event.issue.number }} --body "${{ steps.inference.outputs.response }}"
-      #   env:
-      #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
