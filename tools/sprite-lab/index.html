@@ -34,7 +34,7 @@ footer{color:var(--muted);padding:0 clamp(16px,4vw,48px) 26px;font-size:.78rem}
 <div class="stats"><div class="stat"><strong id="frameStat">4 × 4</strong><span>Atlas grid</span></div><div class="stat"><strong>128 px</strong><span>Frame size</span></div><div class="stat"><strong id="stateStat">Idle</strong><span>Animation</span></div></div>
 <div style="margin-top:18px"><div class="panel-head" style="padding:0 0 12px;border:0"><h2>Atlas sheet</h2><span class="note">4 states / 4 frames each</span></div><div class="sheet-wrap"><canvas id="sheet" width="512" height="512" aria-label="Full animation sprite sheet"></canvas></div></div>
 <div class="buttons"><button class="primary" id="exportPng">Export transparent PNG</button><button id="exportJson">Export frame manifest</button><button id="randomize" class="pink">Randomize silhouette</button></div>
-<p class="note">PNG exports a 512 × 512 sheet with transparent background. Manifest uses frame rectangles and named rows. Review anchors and animation timing in the target game before shipping.</p>
+<p class="note">PNG exports a 512 × 512 sheet with transparent background. Manifest uses frame rectangles, named rows, and a lower-center foot anchor (64, 104). Validate the anchor in the target renderer before shipping.</p>
 </div></section>
 <aside class="panel"><div class="panel-head"><h2>Build the little menace</h2><span class="note">LIVE</span></div><div class="panel-body">
 <div class="controls">
@@ -131,7 +131,7 @@ footer{color:var(--muted);padding:0 clamp(16px,4vw,48px) 26px;font-size:.78rem}
   function download(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1200);}
   $('exportPng').addEventListener('click',()=>sheet.toBlob(b=>b&&download(b,'ash-fall-demon-prototype-atlas.png'),'image/png'));
   $('exportJson').addEventListener('click',()=>{
-    const manifest={format:'ash-fall-sprite-atlas-v1',source:'Ash-Fall Sprite Lab procedural prototype',frameWidth:128,frameHeight:128,columns:4,rows:4,transparent:true,animations:Object.fromEntries(rows.map((name,r)=>[name,{row:r,frameCount:4,fps:name==='move'?10:name==='attack'?12:6,loop:name!=='attack'&&name!=='hit',frames:Array.from({length:4},(_,f)=>({x:f*128,y:r*128,width:128,height:128,anchor:{x:64,y:96}}))}])),character:cfg(),notes:['Prototype only; inspect silhouette and timing in target renderer.','No game integration is performed automatically.']};
+    const manifest={format:'ash-fall-sprite-atlas-v1',source:'Ash-Fall Sprite Lab procedural prototype',frameWidth:128,frameHeight:128,columns:4,rows:4,transparent:true,animations:Object.fromEntries(rows.map((name,r)=>[name,{row:r,frameCount:4,fps:name==='move'?10:name==='attack'?12:6,loop:name!=='attack'&&name!=='hit',frames:Array.from({length:4},(_,f)=>({x:f*128,y:r*128,width:128,height:128,anchor:{x:64,y:104}}))}])),character:cfg(),notes:['Prototype only; inspect silhouette and timing in target renderer.','No game integration is performed automatically.']};
     download(new Blob([JSON.stringify(manifest,null,2)],{type:'application/json'}),'ash-fall-demon-prototype-atlas.json');
   });
   ['species','body','accent','eyes','horns','size'].forEach(id=>$(id).addEventListener('input',renderAtlas));
