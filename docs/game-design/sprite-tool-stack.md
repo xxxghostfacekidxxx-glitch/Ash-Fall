@@ -62,3 +62,10 @@ This clones or fast-forward-updates the five upstream repositories. It requires 
 ## Important implementation status
 
 The installer and this selection guide are committed to Ash-Fall. The upstream tools are not copied into the repository by this commit, and no existing game assets have been replaced. Run the installer in a local checkout to retrieve the source repositories; then review licenses and test the selected two-tool pipeline before integrating any generated output.
+
+
+## First implementation: procedural sprite lab
+
+A local-first browser prototype is committed at [`tools/sprite-lab/index.html`](../../tools/sprite-lab/index.html). It draws an original character procedurally, offers silhouette/palette/face controls, previews four animation states (idle, move, attack, hit), and exports a transparent PNG atlas plus a JSON frame manifest. It has no external API dependency and is not linked into public site navigation.
+
+This establishes a concrete export format and a place to judge proportions and readability before investing in a full sprite pipeline. It is not a substitute for the upstream tools listed above, and it does not yet import their source code or wire the exported sheet into a game's runtime. Test exported frames in the target renderer, especially anchor alignment, loop timing, hitboxes, and mobile readability, before treating them as production art.
