@@ -69,3 +69,10 @@ The installer and this selection guide are committed to Ash-Fall. The upstream t
 A local-first browser prototype is committed at [`tools/sprite-lab/index.html`](../../tools/sprite-lab/index.html). It draws an original character procedurally, offers silhouette/palette/face controls, previews four animation states (idle, move, attack, hit), and exports a transparent PNG atlas plus a JSON frame manifest. It has no external API dependency and is not linked into public site navigation.
 
 This establishes a concrete export format and a place to judge proportions and readability before investing in a full sprite pipeline. It is not a substitute for the upstream tools listed above, and it does not yet import their source code or wire the exported sheet into a game's runtime. Test exported frames in the target renderer, especially anchor alignment, loop timing, hitboxes, and mobile readability, before treating them as production art.
+
+
+## Atlas validation bench
+
+Use [`tools/sprite-lab/atlas-bench.html`](../../tools/sprite-lab/atlas-bench.html) after exporting the PNG and JSON from Sprite Lab. It checks the manifest format, dimensions, animation rows, FPS, frame rectangles, and frame bounds, then previews animation playback. The repeatable workflow and manual checklist live in [`sprite-lab-qa.md`](sprite-lab-qa.md).
+
+The prototype's current anchor is `{ x: 64, y: 104 }`, intended as a provisional lower-center foot anchor. This value is a starting point, not a guarantee: validate it against the actual renderer before using it for movement or collision alignment.
