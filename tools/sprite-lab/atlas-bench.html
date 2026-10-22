@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ash-Fall Atlas Bench</title>
+<style>
+:root{color-scheme:dark;--bg:#0d0d12;--panel:#191920;--line:#393944;--ink:#f5f2fa;--muted:#a8a3b2;--lime:#d4ff32;--pink:#ff39b8;--bad:#ff7777;--good:#b9ff7a}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 10% 0,#2b2037,transparent 38%),var(--bg);color:var(--ink);font:15px/1.5 system-ui,sans-serif}header{padding:24px clamp(16px,4vw,44px);border-bottom:1px solid var(--line)}.kicker{color:var(--lime);font-weight:900;letter-spacing:.16em;font-size:.75rem}h1{font-size:clamp(1.8rem,5vw,3rem);line-height:1.05;margin:.35rem 0}header p{color:var(--muted);max-width:800px;margin:.5rem 0 0}main{max-width:1200px;margin:auto;padding:20px;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(280px,.8fr);gap:16px}.panel{background:linear-gradient(145deg,#202027,#15151b);border:1px solid var(--line);border-radius:16px;overflow:hidden;min-width:0}.head{padding:14px 16px;border-bottom:1px solid var(--line);font-weight:850}.body{padding:16px}.stage{min-height:340px;display:grid;place-items:center;border:1px solid #3a3945;border-radius:12px;background-color:#101015;background-image:linear-gradient(45deg,#24242c 25%,transparent 25%),linear-gradient(-45deg,#24242c 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#24242c 75%),linear-gradient(-45deg,transparent 75%,#24242c 75%);background-size:24px 24px;background-position:0 0,0 12px,12px -12px,-12px 0;overflow:hidden}.stage canvas{width:min(72%,320px);height:auto;image-rendering:pixelated;filter:drop-shadow(0 15px 12px #0009)}.grid{display:grid;gap:12px}.field{display:grid;gap:6px}.field label{font-weight:750;font-size:.8rem}.field input,.field select{width:100%;background:#101015;color:var(--ink);border:1px solid #4a4854;border-radius:9px;padding:10px}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}button{background:#2a2731;border:1px solid #504b5b;color:var(--ink);font-weight:850;border-radius:9px;padding:10px 13px;cursor:pointer}button.primary{background:var(--lime);color:#14140f;border-color:var(--lime)}button:disabled{opacity:.4;cursor:not-allowed}.status{border:1px solid var(--line);border-radius:10px;padding:12px;background:#101015;margin-top:12px;white-space:pre-wrap;overflow-wrap:anywhere}.status.good{border-color:#5b8438;color:var(--good)}.status.bad{border-color:#8c4545;color:var(--bad)}.muted{color:var(--muted);font-size:.82rem}.checks{display:grid;gap:7px;margin-top:10px}.check{border-bottom:1px solid #33323b;padding:7px 0;font-size:.85rem}.check::before{content:"• ";color:var(--lime);font-weight:900}@media(max-width:800px){main{grid-template-columns:1fr;padding:12px}.stage{min-height:270px}.body{padding:12px}}
+</style>
+</head>
+<body>
+<header><div class="kicker">ASH-FALL / DEVELOPER TOOLS</div><h1>ATLAS BENCH <span style="color:var(--lime)">02</span></h1><p>A local browser test bench for exported sprite sheets. Select a PNG atlas and its JSON manifest, validate frame rectangles and animation metadata, then preview the exact frames without uploading anything.</p></header>
+<main>
+<section class="panel"><div class="head">Frame playback</div><div class="body">
+<div class="stage"><canvas id="view" width="128" height="128" aria-label="Selected sprite frame preview"></canvas></div>
+<div class="row" style="margin-top:12px"><div class="field"><label for="anim">Animation state</label><select id="anim" disabled><option value="idle">Idle</option></select></div><div class="field"><label for="scale">Preview scale</label><select id="scale"><option value="1">1×</option><option value="2">2×</option><option value="3" selected>3×</option><option value="4">4×</option></select></div></div>
+<div class="buttons"><button class="primary" id="play" disabled>Pause playback</button><button id="step" disabled>Step frame</button><button id="reset" disabled>Reset</button></div>
+<div id="summary" class="status">Choose both files to begin. Files stay on this device.</div>
+</div></section>
+<aside class="panel"><div class="head">Load and validate</div><div class="body grid">
+<div class="field"><label for="png">Sprite atlas PNG</label><input id="png" type="file" accept="image/png"></div>
+<div class="field"><label for="json">Frame manifest JSON</label><input id="json" type="file" accept=".json,application/json"></div>
+<div class="muted">Expected manifest format: <code>ash-fall-sprite-atlas-v1</code>. Atlas and manifest should be exported from the same build.</div>
+<div id="checks" class="checks"><div class="check">Waiting for atlas and manifest.</div></div>
+<div id="result" class="status">Validation has not run yet.</div>
+<div class="muted">This tool catches structural issues, not artistic issues. Confirm feet/anchor alignment, attack timing, silhouettes at gameplay scale, and hit-reaction readability in the real game before shipping.</div>
+</div></aside>
+</main>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const canvas = $('view'), ctx = canvas.getContext('2d');
+  let image = null, manifest = null, animation = null, frameIndex = 0, lastTime = 0, elapsed = 0, playing = true, valid = false;
+  const checks = [];
+  function report(items, error='') {
+    $('checks').innerHTML = '';
+    items.forEach(item => { const d=document.createElement('div'); d.className='check'; d.textContent=item; $('checks').appendChild(d); });
+    $('result').className='status '+(error?'bad':'good');
+    $('result').textContent=error || (items.length+' validation checks passed. Playback is enabled.');
+  }
+  function fail(message){ valid=false; $('play').disabled=$('step').disabled=$('reset').disabled=$('anim').disabled=true; report(checks,message); }
+  function validate() {
+    if(!image || !manifest) return;
+    checks.length=0;
+    try {
+      if(manifest.format!=='ash-fall-sprite-atlas-v1') throw Error('Unsupported manifest format. Export a manifest from Ash-Fall Sprite Lab.');
+      checks.push('Manifest format recognized.');
+      if(!Number.isInteger(manifest.frameWidth)||!Number.isInteger(manifest.frameHeight)||manifest.frameWidth<1||manifest.frameHeight<1) throw Error('Frame dimensions must be positive integers.');
+      checks.push('Frame dimensions are positive integers.');
+      if(!Number.isInteger(manifest.columns)||!Number.isInteger(manifest.rows)||manifest.columns<1||manifest.rows<1) throw Error('Atlas grid columns and rows must be positive integers.');
+      checks.push('Atlas grid dimensions are valid.');
+      if(image.naturalWidth!==manifest.frameWidth*manifest.columns||image.naturalHeight!==manifest.frameHeight*manifest.rows) throw Error('Atlas image is '+image.naturalWidth+'×'+image.naturalHeight+', but manifest grid expects '+(manifest.frameWidth*manifest.columns)+'×'+(manifest.frameHeight*manifest.rows)+'.');
+      checks.push('PNG dimensions match the manifest grid.');
+      if(!manifest.animations || typeof manifest.animations!=='object' || !Object.keys(manifest.animations).length) throw Error('Manifest has no animations.');
+      checks.push('At least one animation is defined.');
+      for(const [name,a] of Object.entries(manifest.animations)){
+        if(!Number.isInteger(a.row)||a.row<0||a.row>=manifest.rows) throw Error('Animation "'+name+'" references an invalid row.');
+        if(!Number.isInteger(a.frameCount)||a.frameCount<1||a.frameCount>manifest.columns) throw Error('Animation "'+name+'" has an invalid frame count.');
+        if(!Number.isFinite(a.fps)||a.fps<=0||a.fps>60) throw Error('Animation "'+name+'" FPS must be > 0 and <= 60.');
+        if(!Array.isArray(a.frames)||a.frames.length!==a.frameCount) throw Error('Animation "'+name+'" frame metadata count does not match frameCount.');
+        for(const [i,f] of a.frames.entries()){
+          for(const key of ['x','y','width','height']) if(!Number.isInteger(f[key])) throw Error('Animation "'+name+'" frame '+i+' has a non-integer '+key+'.');
+          if(f.x<0||f.y<0||f.width!==manifest.frameWidth||f.height!==manifest.frameHeight||f.x+f.width>image.naturalWidth||f.y+f.height>image.naturalHeight) throw Error('Animation "'+name+'" frame '+i+' is outside the atlas or has the wrong size.');
+          if(f.y!==a.row*manifest.frameHeight) throw Error('Animation "'+name+'" frame '+i+' does not match its declared row.');
+        }
+      }
+      checks.push('Every animation row, FPS value, and frame rectangle is valid.');
+      checks.push('All frame rectangles fit within the PNG atlas.');
+      const select=$('anim'); select.innerHTML='';
+      Object.keys(manifest.animations).forEach(name=>{const o=document.createElement('option');o.value=name;o.textContent=name;select.appendChild(o);});
+      select.disabled=false; animation=manifest.animations[select.value]; frameIndex=0; elapsed=0; valid=true;
+      $('play').disabled=$('step').disabled=$('reset').disabled=false;
+      $('summary').textContent='Atlas: '+image.naturalWidth+'×'+image.naturalHeight+' px\nFrame: '+manifest.frameWidth+'×'+manifest.frameHeight+' px\nAnimations: '+Object.keys(manifest.animations).join(', ')+'\nTransparent flag: '+String(!!manifest.transparent);
+      report(checks); drawFrame();
+    } catch(e) { fail(e.message); }
+  }
+  function drawFrame(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    if(!valid||!animation||!image) return;
+    const f=animation.frames[frameIndex], scale=+$('scale').value;
+    canvas.width=manifest.frameWidth; canvas.height=manifest.frameHeight;
+    ctx.imageSmoothingEnabled=false;
+    ctx.drawImage(image,f.x,f.y,f.width,f.height,0,0,manifest.frameWidth,manifest.frameHeight);
+    canvas.style.width=(manifest.frameWidth*scale)+'px'; canvas.style.height=(manifest.frameHeight*scale)+'px';
+    $('summary').textContent='Animation: '+$('anim').value+'\nFrame: '+(frameIndex+1)+' / '+animation.frameCount+'\nFPS: '+animation.fps+'\nAnchor: '+(f.anchor?f.anchor.x+', '+f.anchor.y:'not supplied');
+  }
+  $('png').addEventListener('change',async e=>{
+    const file=e.target.files[0]; if(!file)return;
+    image=new Image(); image.onload=validate; image.onerror=()=>fail('Could not read PNG atlas.');
+    image.src=URL.createObjectURL(file);
+  });
+  $('json').addEventListener('change',async e=>{
+    const file=e.target.files[0]; if(!file)return;
+    try{manifest=JSON.parse(await file.text());validate();}catch(err){fail('Manifest is not valid JSON: '+err.message);}
+  });
+  $('anim').addEventListener('change',()=>{animation=manifest.animations[$('anim').value];frameIndex=0;elapsed=0;drawFrame();});
+  $('scale').addEventListener('change',drawFrame);
+  $('play').addEventListener('click',()=>{playing=!playing;$('play').textContent=playing?'Pause playback':'Resume playback';});
+  $('step').addEventListener('click',()=>{if(!valid)return;frameIndex=(frameIndex+1)%animation.frameCount;drawFrame();});
+  $('reset').addEventListener('click',()=>{frameIndex=0;elapsed=0;drawFrame();});
+  function loop(now){if(valid&&playing&&animation){if(!lastTime)lastTime=now;elapsed+=(now-lastTime)/1000;const interval=1/animation.fps;while(elapsed>=interval){elapsed-=interval;frameIndex++;if(frameIndex>=animation.frameCount)frameIndex=animation.loop?0:animation.frameCount-1;}drawFrame();}lastTime=now;requestAnimationFrame(loop);}
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
