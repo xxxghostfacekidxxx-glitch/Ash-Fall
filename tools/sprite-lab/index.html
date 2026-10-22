@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ash-Fall Sprite Lab</title>
+<style>
+:root{color-scheme:dark;--bg:#101014;--panel:#19191f;--line:#373741;--ink:#f5f1fa;--muted:#aaa5b6;--lime:#d4ff32;--pink:#ff39b8;--violet:#9d65ff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 15% 0,#282033 0,transparent 38%),var(--bg);color:var(--ink);font:15px/1.45 system-ui,sans-serif}
+header{padding:24px clamp(16px,4vw,48px);border-bottom:1px solid var(--line);display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.kicker{color:var(--lime);font-size:.72rem;font-weight:900;letter-spacing:.18em;text-transform:uppercase}h1{font-size:clamp(1.7rem,4vw,3rem);line-height:1;margin:.35rem 0}header p{margin:.4rem 0 0;color:var(--muted);max-width:650px}
+.badge{border:1px solid var(--lime);color:var(--lime);border-radius:999px;padding:7px 11px;font-size:.75rem;font-weight:800}
+main{padding:22px clamp(12px,3vw,36px) 42px;max-width:1500px;margin:auto;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(280px,.8fr);gap:18px}
+.panel{background:linear-gradient(145deg,#202027,#15151a);border:1px solid var(--line);border-radius:18px;overflow:hidden;min-width:0}.panel-head{padding:15px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px}.panel-head h2{margin:0;font-size:1rem}.panel-body{padding:18px}
+.stage{background-color:#101015;background-image:linear-gradient(45deg,#202027 25%,transparent 25%),linear-gradient(-45deg,#202027 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#202027 75%),linear-gradient(-45deg,transparent 75%,#202027 75%);background-size:24px 24px;background-position:0 0,0 12px,12px -12px,-12px 0;border:1px solid #383843;border-radius:14px;min-height:320px;display:grid;place-items:center;position:relative;overflow:hidden}
+#preview{width:min(68%,300px);image-rendering:pixelated;filter:drop-shadow(0 18px 10px #0008)}.stage-label{position:absolute;bottom:12px;left:14px;font-size:.7rem;letter-spacing:.1em;color:#b8b1c6;text-transform:uppercase}
+.controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.control{display:grid;gap:6px}.control label{font-size:.77rem;font-weight:750;color:#d2cddd}.control select,.control input[type=range]{width:100%}.control select{background:#101015;color:var(--ink);border:1px solid #464650;border-radius:9px;padding:10px;min-width:0}.control input[type=range]{accent-color:var(--lime)}.wide{grid-column:1/-1}
+.buttons{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px}button{cursor:pointer;border:1px solid #4a4654;border-radius:10px;padding:10px 13px;background:#292630;color:var(--ink);font-weight:800}button:hover{border-color:var(--lime)}button.primary{background:var(--lime);color:#14140f;border-color:var(--lime)}button.pink{border-color:var(--pink);color:#ffb3e3}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}.stat{border:1px solid var(--line);background:#131318;border-radius:10px;padding:10px}.stat strong{display:block;font-size:1.1rem}.stat span{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.sheet-wrap{overflow:auto;background:#101015;border-radius:12px;border:1px solid #363640;padding:10px}.sheet-wrap canvas{display:block;max-width:100%;height:auto;image-rendering:pixelated;margin:auto}
+.note{color:var(--muted);font-size:.82rem}.notice{border-left:3px solid var(--pink);padding:10px 12px;background:#2a1828;border-radius:0 8px 8px 0;font-size:.8rem;margin-top:14px}
+.palette{display:flex;gap:7px}.swatch{height:18px;flex:1;border-radius:5px;border:1px solid #ffffff45}
+footer{color:var(--muted);padding:0 clamp(16px,4vw,48px) 26px;font-size:.78rem}
+@media(max-width:850px){main{grid-template-columns:1fr}.stage{min-height:270px}.controls{grid-template-columns:1fr 1fr}}@media(max-width:440px){.controls{grid-template-columns:1fr}.wide{grid-column:auto}.stats{grid-template-columns:1fr 1fr 1fr}.panel-body{padding:12px}}
+</style>
+</head>
+<body>
+<header><div><div class="kicker">Ash-Fall / Developer Tools</div><h1>SPRITE LAB <span style="color:var(--lime)">01</span></h1><p>Procedural character prototype and transparent atlas exporter. Original shapes, no copied character art, no external API, no runtime bill.</p></div><span class="badge">LOCAL-FIRST • EXPERIMENTAL</span></header>
+<main>
+<section class="panel">
+<div class="panel-head"><h2>Character preview</h2><span class="note" id="animLabel">IDLE LOOP</span></div>
+<div class="panel-body">
+<div class="stage"><canvas id="preview" width="128" height="128" aria-label="Animated sprite preview"></canvas><span class="stage-label">Transparent sprite / checkerboard preview</span></div>
+<div class="stats"><div class="stat"><strong id="frameStat">4 × 4</strong><span>Atlas grid</span></div><div class="stat"><strong>128 px</strong><span>Frame size</span></div><div class="stat"><strong id="stateStat">Idle</strong><span>Animation</span></div></div>
+<div style="margin-top:18px"><div class="panel-head" style="padding:0 0 12px;border:0"><h2>Atlas sheet</h2><span class="note">4 states / 4 frames each</span></div><div class="sheet-wrap"><canvas id="sheet" width="512" height="512" aria-label="Full animation sprite sheet"></canvas></div></div>
+<div class="buttons"><button class="primary" id="exportPng">Export transparent PNG</button><button id="exportJson">Export frame manifest</button><button id="randomize" class="pink">Randomize silhouette</button></div>
+<p class="note">PNG exports a 512 × 512 sheet with transparent background. Manifest uses frame rectangles and named rows. Review anchors and animation timing in the target game before shipping.</p>
+</div></section>
+<aside class="panel"><div class="panel-head"><h2>Build the little menace</h2><span class="note">LIVE</span></div><div class="panel-body">
+<div class="controls">
+<div class="control wide"><label for="species">Silhouette family</label><select id="species"><option value="imp">Spindly imp</option><option value="brute">Scrap brute</option><option value="orb">Floating eyeball</option><option value="bone">Bone gremlin</option></select></div>
+<div class="control"><label for="body">Body color</label><select id="body"><option value="#d4ff32">Toxic lime</option><option value="#9d65ff">Bruised violet</option><option value="#ff39b8">Hot magenta</option><option value="#f36b37">Ember orange</option><option value="#e9e0d0">Bone white</option></select></div>
+<div class="control"><label for="accent">Accent</label><select id="accent"><option value="#ff39b8">Hot magenta</option><option value="#d4ff32">Toxic lime</option><option value="#ffd84d">Warning yellow</option><option value="#9d65ff">Bruised violet</option></select></div>
+<div class="control"><label for="eyes">Eye count</label><select id="eyes"><option value="1">One suspicious eye</option><option value="2" selected>Two eyes</option><option value="3">Three eyes</option></select></div>
+<div class="control"><label for="horns">Horn style</label><select id="horns"><option value="crooked">Crooked</option><option value="short">Stubby</option><option value="none">No horns</option><option value="antenna">Antennae</option></select></div>
+<div class="control wide"><label for="size">Body exaggeration <span id="sizeVal">100%</span></label><input id="size" type="range" min="75" max="125" value="100"></div>
+<div class="control wide"><label for="animation">Preview animation</label><select id="animation"><option value="idle">Idle / twitch</option><option value="move">Move / run</option><option value="attack">Attack / wind-up</option><option value="hit">Hit reaction</option></select></div>
+<div class="control wide"><label>Palette</label><div class="palette"><span class="swatch" style="background:#111116"></span><span class="swatch" style="background:#d4ff32"></span><span class="swatch" style="background:#ff39b8"></span><span class="swatch" style="background:#9d65ff"></span><span class="swatch" style="background:#f36b37"></span><span class="swatch" style="background:#e9e0d0"></span></div></div>
+</div>
+<div class="buttons"><button id="refresh" class="primary">Regenerate atlas</button><button id="pause">Pause animation</button></div>
+<div class="notice"><strong>Production status:</strong> this is an original procedural prototype, not a finished artist-authored sprite set. Use it to validate proportions, palette, atlas layout, and the export path before producing final character art.</div>
+<p class="note" style="margin-top:16px">No images are uploaded. All drawing and exports happen in this page. The tool is intended for local development and is not linked from the public game navigation.</p>
+</div></aside>
+</main>
+<footer>Ash-Fall Sprite Lab • Prototype output is not automatically wired into a game. Tool-source and asset licenses must be reviewed separately before distribution.</footer>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const preview = $('preview'), pctx = preview.getContext('2d'), sheet = $('sheet'), sctx = sheet.getContext('2d');
+  const frame = 128, frames = 4, rows = ['idle','move','attack','hit'];
+  let tick = 0, paused = false, seed = 17;
+  const cfg = () => ({species:$('species').value, body:$('body').value, accent:$('accent').value, eyes:+$('eyes').value, horns:$('horns').value, size:+$('size').value/100});
+  const path = (ctx, pts, fill, stroke='#111116', width=5) => {ctx.beginPath();ctx.moveTo(pts[0][0],pts[0][1]);for(let i=1;i<pts.length;i++)ctx.lineTo(pts[i][0],pts[i][1]);ctx.closePath();ctx.fillStyle=fill;ctx.fill();ctx.strokeStyle=stroke;ctx.lineWidth=width;ctx.lineJoin='round';ctx.lineCap='round';ctx.stroke();};
+  function draw(ctx, x, y, row, f, c) {
+    ctx.save(); ctx.translate(x+64,y+64);
+    const phase=f/3, bob=row==='move'?Math.sin(phase*Math.PI*2)*5:row==='idle'?Math.sin(phase*Math.PI*2)*2:0;
+    const recoil=row==='hit'?(f===0?5:f===1?9:f===2?4:0):0;
+    const lunge=row==='attack'?[0,4,13,2][f]:0;
+    ctx.translate(-lunge+recoil,bob); ctx.scale(c.size,c.size);
+    ctx.lineWidth=5;ctx.lineJoin='round';ctx.lineCap='round';
+    // Ground shadow is deliberately omitted so every exported frame remains transparent.
+    if(c.species==='orb'){
+      ctx.beginPath();ctx.ellipse(0,4,34,32,0,0,Math.PI*2);ctx.fillStyle=c.body;ctx.fill();ctx.strokeStyle='#111116';ctx.lineWidth=6;ctx.stroke();
+      path(ctx,[[-22,-20],[-35,-34],[-16,-28]],c.accent);
+      path(ctx,[[22,-20],[35,-34],[16,-28]],c.accent);
+    } else {
+      // Original body silhouettes, with intentionally uneven angles and proportions.
+      const bodyPts=c.species==='brute'?[[-29,-22],[-21,-38],[2,-35],[27,-27],[33,4],[24,28],[8,35],[-23,29],[-34,7]]:c.species==='bone'?[[-25,-20],[-18,-35],[15,-32],[27,-13],[21,23],[8,34],[-20,28],[-30,7]]:[[-21,-26],[-9,-38],[11,-31],[24,-19],[22,16],[11,33],[-12,29],[-26,8]];
+      path(ctx,bodyPts,c.body);
+      // Jagged belly plate / exposed machinery
+      path(ctx,[[-14,3],[0,-2],[13,4],[9,20],[-8,22]],c.species==='bone'?'#e9e0d0':'#28242f','#111116',4);
+      ctx.fillStyle=c.accent;ctx.fillRect(-4,6,8,9);
+      // Legs with exaggerated boots
+      const step=row==='move'?Math.sin(phase*Math.PI*2)*10:row==='attack'&&f===2?8:0;
+      ctx.strokeStyle='#111116';ctx.lineWidth=9;
+      ctx.beginPath();ctx.moveTo(-11,22);ctx.lineTo(-14-step,37);ctx.lineTo(-23-step,39);ctx.moveTo(11,22);ctx.lineTo(15+step,36);ctx.lineTo(24+step,38);ctx.stroke();
+      ctx.fillStyle='#111116';ctx.fillRect(-29-step,35,16,7);ctx.fillRect(17+step,34,16,7);
+      // Arms swing on movement and raise during attack
+      const armY=row==='attack'?[8,1,-13,-3][f]:row==='hit'?8:0;
+      ctx.strokeStyle='#111116';ctx.lineWidth=10;
+      ctx.beginPath();ctx.moveTo(-21,-10);ctx.lineTo(-34,armY+3);ctx.lineTo(-37,armY+12);ctx.moveTo(21,-9);ctx.lineTo(34,armY-5);ctx.lineTo(38,armY+4);ctx.stroke();
+      ctx.fillStyle=c.accent;ctx.beginPath();ctx.arc(-38,armY+13,7,0,Math.PI*2);ctx.fill();ctx.stroke();
+      ctx.beginPath();ctx.arc(39,armY+5,7,0,Math.PI*2);ctx.fill();ctx.stroke();
+      // Horns/antennae
+      if(c.horns!=='none'){
+        if(c.horns==='antenna'){
+          ctx.strokeStyle='#111116';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(-9,-31);ctx.quadraticCurveTo(-19,-49,-11,-52);ctx.moveTo(10,-30);ctx.quadraticCurveTo(20,-49,16,-54);ctx.stroke();
+          ctx.fillStyle=c.accent;ctx.beginPath();ctx.arc(-11,-52,5,0,7);ctx.arc(16,-54,5,0,7);ctx.fill();
+        } else {
+          path(ctx,c.horns==='short'?[[-17,-28],[-19,-42],[-7,-31]]:[[-17,-26],[-27,-49],[-8,-36]],c.accent);
+          path(ctx,c.horns==='short'?[[9,-29],[12,-42],[19,-30]]:[[8,-31],[24,-49],[17,-29]],c.accent);
+        }
+      }
+    }
+    // Face: eyes are high contrast and readable at reduced scale.
+    const eyeY=c.species==='orb'?-2:-14;
+    const eyeXs=c.eyes===1?[0]:c.eyes===2?[-9,10]:[-15,0,15];
+    eyeXs.forEach((ex,i)=>{ctx.beginPath();ctx.ellipse(ex,eyeY+(i===2?3:0),c.eyes===3?5:7,c.species==='orb'?10:8, row==='hit'?.22:0,0,Math.PI*2);ctx.fillStyle='#fff7dd';ctx.fill();ctx.strokeStyle='#111116';ctx.lineWidth=3;ctx.stroke();ctx.beginPath();ctx.arc(ex+(row==='hit'?3:1),eyeY,3,0,Math.PI*2);ctx.fillStyle='#111116';ctx.fill();});
+    // Different mouth expressions per animation row.
+    ctx.strokeStyle='#111116';ctx.lineWidth=4;ctx.beginPath();
+    if(row==='attack'&&f>=2){ctx.moveTo(-9,9);ctx.lineTo(9,9);ctx.lineTo(6,17);ctx.lineTo(-6,17);ctx.closePath();ctx.fillStyle='#111116';ctx.fill();}
+    else if(row==='hit'){ctx.ellipse(0,10,5,7,0,0,Math.PI*2);ctx.stroke();}
+    else {ctx.moveTo(-7,10);ctx.quadraticCurveTo(0,row==='move'?17:14,8,8);ctx.stroke();}
+    // Attack cue is separate from body and stays inside frame.
+    if(row==='attack'&&f===2){ctx.strokeStyle=c.accent;ctx.lineWidth=5;ctx.beginPath();ctx.arc(31,-4,13,-.9,.9);ctx.stroke();ctx.fillStyle='#fff';ctx.fillRect(39,-8,8,4);}
+    if(row==='hit'&&f<2){ctx.fillStyle=c.accent;[[ -38,-29],[-43,-13],[35,-30],[43,-18]].forEach(([sx,sy])=>{ctx.save();ctx.translate(sx,sy);ctx.rotate(.5);ctx.fillRect(-2,-5,4,10);ctx.restore();});}
+    ctx.restore();
+  }
+  function renderAtlas(){
+    const c=cfg(); sctx.clearRect(0,0,sheet.width,sheet.height);
+    for(let r=0;r<4;r++)for(let f=0;f<4;f++)draw(sctx,f*frame,r*frame,rows[r],f,c);
+    $('sizeVal').textContent=Math.round(c.size*100)+'%';
+  }
+  function renderPreview(){
+    if(!paused)tick+=1;
+    const row=$('animation').value, f=Math.floor(tick/8)%4;
+    pctx.clearRect(0,0,128,128);draw(pctx,0,0,row,f,cfg());
+    $('animLabel').textContent=row.toUpperCase()+' LOOP';$('stateStat').textContent=row[0].toUpperCase()+row.slice(1);
+    requestAnimationFrame(renderPreview);
+  }
+  function download(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1200);}
+  $('exportPng').addEventListener('click',()=>sheet.toBlob(b=>b&&download(b,'ash-fall-demon-prototype-atlas.png'),'image/png'));
+  $('exportJson').addEventListener('click',()=>{
+    const manifest={format:'ash-fall-sprite-atlas-v1',source:'Ash-Fall Sprite Lab procedural prototype',frameWidth:128,frameHeight:128,columns:4,rows:4,transparent:true,animations:Object.fromEntries(rows.map((name,r)=>[name,{row:r,frameCount:4,fps:name==='move'?10:name==='attack'?12:6,loop:name!=='attack'&&name!=='hit',frames:Array.from({length:4},(_,f)=>({x:f*128,y:r*128,width:128,height:128,anchor:{x:64,y:96}}))}])),character:cfg(),notes:['Prototype only; inspect silhouette and timing in target renderer.','No game integration is performed automatically.']};
+    download(new Blob([JSON.stringify(manifest,null,2)],{type:'application/json'}),'ash-fall-demon-prototype-atlas.json');
+  });
+  ['species','body','accent','eyes','horns','size'].forEach(id=>$(id).addEventListener('input',renderAtlas));
+  $('animation').addEventListener('change',()=>tick=0);
+  $('refresh').addEventListener('click',renderAtlas);
+  $('pause').addEventListener('click',()=>{paused=!paused;$('pause').textContent=paused?'Resume animation':'Pause animation';});
+  $('randomize').addEventListener('click',()=>{
+    seed=(seed*9301+49297)%233280;
+    const pick=(id)=>{const el=$(id);el.selectedIndex=(seed+id.length*7)%el.options.length;};
+    pick('species');pick('body');pick('accent');pick('eyes');pick('horns');$('size').value=75+(seed%51);renderAtlas();
+  });
+  renderAtlas();renderPreview();
+})();
+</script>
+</body></html>
