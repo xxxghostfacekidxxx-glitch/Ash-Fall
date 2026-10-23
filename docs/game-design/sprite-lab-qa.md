@@ -41,3 +41,10 @@
 ## Current limitations
 
 This is a developer-only prototype workflow, not a production game integration. Atlas Bench validates structural consistency and provides playback; it cannot judge art quality or guarantee compatibility with an engine-specific animation system. The files have been committed to GitHub, but this environment has not run them in a full graphical browser or connected them to the ARPG renderer. Do not mark browser QA or game integration complete until those tests actually happen.
+
+
+## Playable runtime integration test
+
+Open [`tools/sprite-lab/arpg-integration-test.html`](../../tools/sprite-lab/arpg-integration-test.html) and load the PNG atlas and JSON manifest exported by Sprite Lab. The harness validates the atlas contract and uses the selected animation rows to drive the player character in a small combat sandbox. Controls: WASD move, mouse click to move toward a point, Space/click Attack, Shift dodge, R reset. Attack damages the target dummy when in range; its health bar and hit reaction show the combat event.
+
+This is a real atlas consumer and playable renderer test, but remains a standalone developer harness. It does not yet replace or connect to an existing production ARPG renderer because no production ARPG entry point was found in the repository's searchable source. It uses the current front-facing prototype art and a simple depth-sorted ground plane, not a complete isometric art/engine system.
